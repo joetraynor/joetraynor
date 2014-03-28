@@ -1,72 +1,223 @@
-<!doctype html>
-
-
-<html lang="en">
+<!DOCTYPE html>
+<html>
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=1024" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <title>Joe Traynor</title>
-    
-    <meta name="description" content="impress.js is a presentation tool based on the power of CSS3 transforms and transitions in modern browsers and inspired by the idea behind prezi.com." />
-    <meta name="author" content="Bartek Szopka" />
+  <style>
+    body {
+    font-family: 'helvetica neue', helvetica, arial, sans-serif;
+    background:#3B5323;
+    position: relative;
+    }
 
-    <link href="http://fonts.googleapis.com/css?family=Open+Sans:regular,semibold,italic,italicsemibold|PT+Sans:400,700,400italic,700italic|PT+Serif:400,700,400italic,700italic" rel="stylesheet" />
+    #tennisCourt {
+      border: 5px solid white;
+      background-color: green;
+      text-align: center;
+      margin: 0 auto;
+      border-collapse: collapse;
+      opacity:0.8;
+      height: 60vh;
+      width: 40vh;
+    }
 
-    <link href="css/impress-demo.css" rel="stylesheet" />
-    
-    <link rel="shortcut icon" href="favicon.png" />
-    <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+    td {
+      border: solid 1px white;
+      color: white;
+      font-size: 50px;
+    }
+
+    .doubles {
+      width: 50px;
+    }
+
+    h1 {
+      text-align: center;
+      color: white;
+      font-weight: bold;
+    }
+
+  </style>
 </head>
 
-<body class="impress-not-supported">
+<body>
+<!--   <p id="test">Speak..</p> -->
 
-<!-- <div class="fallback-message">
-    <p>Your browser <b>doesn't support the features required</b> by impress.js, so you are presented with a simplified version of this presentation.</p>
-    <p>For the best experience please use the latest <b>Chrome</b>, <b>Safari</b> or <b>Firefox</b> browser.</p>
-</div> -->
-
-<div id="impress">
-
-    
+    <h1 id="theader">Tennis scoring POC. Start your sentence with 'Score'.</h1>
+<br>
 
 
-    <div id="source" class="step" data-x="6300" data-y="1800" data-rotate="0" data-scale="4">
-        <h2><a href="http://www.twitter.com/joetrayns">Joe Traynor</a></h2>
-        <img src="images/Joe_round.png">
-    </div>
-
-    <div id="one-more-thing" class="step" data-x="6000" data-y="2200" data-rotate="-20" data-scale="2">
-        <p>Currently employed at Telefonica UK
-        </p>
-    </div>
-
-    <div id="name" class="step" data-x="6000" data-y="2800" data-z="-1000" data-rotate="-40" data-scale="2">
-        <p>Computing Student at NTU</p>
-    </div>
-
-     <div id="email" class="step" data-x="6400" data-y="3400" data-z="-2000" data-rotate="-70" data-scale="2">
-        <p>Email: joetraynor9@hotmail.com</p>
-    </div>   
-
-    <div id="its-in-3d" class="step" data-x="6200" data-y="4300" data-z="-100" data-rotate-x="-40" data-rotate-y="10" data-scale="2">
-        <p><span class="have">have</span> <span class="you">you</span> <span class="noticed">noticed</span> <span class="its">it's</span> <span class="in">in</span> <b>3D<sup>*</sup></b>?</p>
-        <span class="footnote">* I'M A BIG DEAL<br>hire me already..</span>
-    </div>
-
-</div>
-
-<div class="hint">
-    <p>Use a spacebar or arrow keys to navigate</p>
-</div>
-<script>
-if ("ontouchstart" in document.documentElement) { 
-    document.querySelector(".hint").innerHTML = "<p>Tap on the left or right to navigate</p>";
-}
-</script>
-
-<script src="js/impress.js"></script>
-<script>impress().init();</script>
-
+  <table id="tennisCourt" border="1">
+    <tr>
+       <td rowspan="2" class="doubles">&nbsp;</td>
+       <td colspan="2" id="column1">&nbsp;</td>
+       <td rowspan="2" class="doubles">&nbsp;</td>
+     </tr>
+     <tr>
+       <td>&nbsp;</td>
+       <td>&nbsp;</td>
+     </tr>
+     <tr>
+       <td rowspan="2" class="doubles">&nbsp;</td>
+       <td>&nbsp;</td>
+       <td>&nbsp;</td>
+       <td rowspan="2" class="doubles">&nbsp;</td>
+     </tr>
+     <tr>
+       <td colspan="2" id="column2">&nbsp;</td>
+     </tr>
+  </table>
 </body>
+
+<script type="text/javascript">
+
+var allPs = document.getElementsByTagName('p');
+var theader = document.getElementById('theader');
+var column1 = document.getElementById('column1');
+var column2 = document.getElementById('column2');
+var recognition = new webkitSpeechRecognition();
+recognition.continuous = true;
+recognition.interimResults = true;
+recognition.start();
+
+recognition.onresult = listenForOkayGoogle;
+
+function listenForOkayGoogle(event) {
+  var resultsLength = event.results.length -1 ;
+  var ArrayLength = event.results[resultsLength].length -1;
+  var Word = event.results[resultsLength][ArrayLength].transcript;
+  var table = document.getElementById('table');
+   if ((Word.indexOf('score') != -1) || (Word.indexOf('school') != - 1)) {
+     theader.innerHTML = 'What is the score?';
+     recognition.onresult = listenForNumbersUntilFinished;
+   }
+}
+
+function listenForNumbersUntilFinished(event) {
+  var resultsLength = event.results.length -1 ;
+  var ArrayLength = event.results[resultsLength].length -1;
+  var Word = event.results[resultsLength][ArrayLength].transcript;
+  console.log(Word);
+  //*******************************************
+
+  //CANT UNDERSATAND ME SAYING LOVE
+
+   if ((Word.indexOf('15') != -1) && (Word.indexOf('love') != - 1)) {
+     column1.innerHTML = '15';
+     column2.innerHTML = '0';
+   }
+   if ((Word.indexOf('30') != -1) && (Word.indexOf('love') != - 1)) {
+     column1.innerHTML = '30';
+     column2.innerHTML = '0'
+   }
+   if ((Word.indexOf('40') != -1) && (Word.indexOf('love') != - 1)) {
+     column1.innerHTML = '40';
+     column2.innerHTML = '0'
+   }
+
+  //********************************************
+   if ((Word.indexOf('1500') != -1) || (Word.indexOf('15', 'all') != - 1)) {
+     column1.innerHTML = '15';
+     column2.innerHTML = '15'
+   }
+   if ((Word.indexOf('3000') != -1) || (Word.indexOf('30', 'all') != - 1)) {
+     column1.innerHTML = '30';
+     column2.innerHTML = '30'
+   }
+   if (Word.indexOf('3015') != -1) {
+     column1.innerHTML = '30';
+     column2.innerHTML = '15'
+   }
+   if (Word.indexOf('4015') != -1) {
+     column1.innerHTML = '40';
+     column2.innerHTML = '15'
+   }
+   if (Word.indexOf('1530') != -1){
+     column1.innerHTML = '15';
+     column2.innerHTML = '30'
+   }
+   if (Word.indexOf('4030') != -1) {
+     column1.innerHTML = '40';
+     column2.innerHTML = '30'
+   }
+   if (Word.indexOf('1540') != -1) {
+     column1.innerHTML = '15';
+     column2.innerHTML = '40'
+   }
+   if (Word.indexOf('3040') != -1) {
+     column1.innerHTML = '30';
+     column2.innerHTML = '40'
+   }
+   if ((Word.indexOf('juice') != -1) || (Word.indexOf('deuce') != - 1)) {
+     column1.innerHTML = '40';
+     column2.innerHTML = '40'
+   }
+   if ((Word.indexOf('advantage', 'you') != -1) || (Word.indexOf('your', 'advantage') != - 1)) {
+     column1.innerHTML = '40';
+     column2.innerHTML = 'AD'
+   }
+   if ((Word.indexOf('my', 'advantage') != -1) | (Word.indexOf('advantage', 'me') != - 1)) {
+     column1.innerHTML = 'AD';
+     column2.innerHTML = '40'
+   }
+   if (Word.indexOf('love', '15') != -1) {
+     column1.innerHTML = '0';
+     column2.innerHTML = '15'
+   }
+   if (Word.indexOf('love', '30') != -1) {
+     column1.innerHTML = '0';
+     column2.innerHTML = '30'
+   }
+   if (Word.indexOf('love', '40') != -1) {
+     column1.innerHTML = '0';
+     column2.innerHTML = '40'
+   }
+   if ((Word.indexOf('my', 'game') != -1) || (Word.indexOf('my', 'gay') != - 1)) {
+     column1.innerHTML = 'GAME';
+     column2.innerHTML = 'LOST'
+   }
+   if ((Word.indexOf('your', 'game') != -1) || (Word.indexOf('your', 'gay') != - 1)) {
+     column1.innerHTML = 'LOST';
+     column2.innerHTML = 'GAME'
+   }
+   if (Word.indexOf('in', 'set') != -1) {
+     column1.innerHTML = 'SET';
+     column2.innerHTML = 'LOST'
+   }
+   if (Word.indexOf('out', 'set') != -1) {
+     column1.innerHTML = 'LOST';
+     column2.innerHTML = 'SET'
+   }
+  //  if (Word.indexOf('i', 'win') != -1) {
+  //    column1.innerHTML = 'WINNER';
+  //    column2.innerHTML = 'LOSER'
+  //  }
+  //  if (Word.indexOf('you', 'win') != -1) {
+  //    column1.innerHTML = 'LOSER';
+  //    column2.innerHTML = 'WINNER'
+  //  }
+
+   //*************************************************************
+  if ((Word.indexOf('finish') != -1) && (Word.indexOf('finished') != - 1)) {
+     theader.innerHTML = "Start your sentence with 'Score'";
+     theader.style.borderColor = "black";
+     recognition.onresult = listenForOkayGoogle;
+   }
+  if ((Word.indexOf('s***') != -1) || (Word.indexOf('f***') != - 1)) {
+    alert('OI! Language..');
+  }
+}
+
+recognition.onerror = function(event){
+  console.log('error?');
+  console.log(event);
+}
+
+
+function checkForWord(word, data_word, url){
+  if (word.indexOf(data_word) != -1) {
+
+  }
+}
+
+
+</script>
 </html>
